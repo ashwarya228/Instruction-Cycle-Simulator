@@ -212,6 +212,17 @@ def execute_instruction(instruction):
             # LOAD R1, 05 loads the immediate value 5.
            value = parse_number(source)
             elif opcode == "MOV":
+               if opcode == "LOAD":
+            value = parse_number(source)
+
+        elif opcode == "MOV":
+            if source in REGISTER_NAMES:
+                value = registers[source]
+            else:
+                value = parse_number(source)
+
+        registers[dest] = value
+        return f"{dest} ← {value}" 
     value = parse_number(source)
     registers[dest] = value
             return f"{dest} ← {value}"
