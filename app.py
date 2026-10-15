@@ -145,6 +145,11 @@ HALT""",
 }
 
 REGISTER_NAMES = ("R1", "R2")
+def parse_number(value):
+    value = value.strip()
+    if value.lower().startswith(("0x", "0b")):
+        return int(value, 0)
+    return int(value, 10)
 STAGES = [
     ("🔍", "FETCH", "Read the next instruction", "#fff0d9"),
     ("🧠", "DECODE", "Understand the instruction", "#ffe8f1"),
@@ -205,7 +210,7 @@ def execute_instruction(instruction):
 
         if opcode == "LOAD":
             # LOAD R1, 05 loads the immediate value 5.
-            value = int(source, 0)
+           value = parse_number(source)
             registers[dest] = value
             return f"{dest} ← {value}"
 
@@ -237,7 +242,7 @@ def execute_instruction(instruction):
         source, address_text = parts[1], parts[2]
         if source not in REGISTER_NAMES:
             raise ValueError("STORE source must be R1 or R2.")
-        address = int(address_text, 0)
+        value = parse_number(address_text)
         memory[address] = registers[source]
         return f"Memory[{address}] ← {registers[source]}"
 
